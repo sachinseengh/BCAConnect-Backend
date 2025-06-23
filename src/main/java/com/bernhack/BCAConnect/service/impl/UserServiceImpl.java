@@ -2,6 +2,7 @@ package com.bernhack.BCAConnect.service.impl;
 
 import com.bernhack.BCAConnect.Exception.AppException;
 import com.bernhack.BCAConnect.constant.StringConstant;
+import com.bernhack.BCAConnect.dto.changePassword.ChangePasswordRequest;
 import com.bernhack.BCAConnect.dto.user.UserResponse;
 import com.bernhack.BCAConnect.dto.auth.LoginRequest;
 import com.bernhack.BCAConnect.dto.auth.RegisterRequest;
@@ -14,8 +15,10 @@ import com.bernhack.BCAConnect.repository.UserRepository;
 import com.bernhack.BCAConnect.service.UserService;
 import com.bernhack.BCAConnect.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -76,8 +79,45 @@ public class UserServiceImpl implements UserService {
 
         List<Posts> posts = user.getPosts();
 
-         return new UserResponse(user.getId(),user.getFullName(),user.getEmail(),user.getSemester(),roles,posts);
+         return new UserResponse(user.getId(),user.getFullName(),user.getEmail(),user.getSemester(),user.getSemester(),roles,posts);
 
+    }
+
+    @Override
+    public UserResponse getMe() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        return getUser(username);
+    }
+
+    @Override
+    public Long deleteUser(String username) {
+
+        User user = userRepository.findByUserName(username).orElseThrow(()->new AppException("User not found"));
+        userRepository.delete(user);
+        return user.getId();
+    }
+
+    @Override
+    public Long deleteMe() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+        return deleteUser(username);
+    }
+
+    @Override
+    public String changePassword(ChangePasswordRequest changePasswordRequest) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User user = userRepository.findByUserName(authentication.getName()).orElseThrow(()->new AppException("User not found"));
+
+
+        return "";
     }
 
     @Override

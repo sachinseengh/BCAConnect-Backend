@@ -8,10 +8,7 @@ import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user/")
@@ -25,5 +22,20 @@ public class UserController extends BaseController {
     public ResponseEntity<GlobalAPIResponse> getUser(@PathVariable String username){
         return  successResponse(StringConstant.USER_FETCHED,userService.getUser(username));
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<GlobalAPIResponse> getMe(){
+        return  successResponse(StringConstant.USER_FETCHED,userService.getMe());
+    }
+
+    @DeleteMapping("/delete/{username}")
+    public ResponseEntity<GlobalAPIResponse> deleteUser(@PathVariable String username){
+        return successResponse(StringConstant.USER_DELETED,userService.deleteUser(username));
+    }
+    @DeleteMapping("/delete/me")
+    public ResponseEntity<GlobalAPIResponse> deleteMe(){
+        return successResponse(StringConstant.USER_DELETED,userService.deleteMe());
+    }
+
 
 }
