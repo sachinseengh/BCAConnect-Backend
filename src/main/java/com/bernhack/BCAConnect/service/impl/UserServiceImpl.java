@@ -117,7 +117,15 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUserName(authentication.getName()).orElseThrow(()->new AppException("User not found"));
 
 
-        return "";
+
+        if(!passwordEncoder.matches(changePasswordRequest.getOldPassword(),user.getPassword())){
+            throw new AppException("Incorrect Old Password");
+        }
+
+          user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+
+          userRepository.save(user);
+        return StringConstant.PASSWORD_CHANGED;
     }
 
     @Override

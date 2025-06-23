@@ -3,6 +3,7 @@ package com.bernhack.BCAConnect.controller.user;
 import com.bernhack.BCAConnect.constant.StringConstant;
 import com.bernhack.BCAConnect.controller.BaseController;
 import com.bernhack.BCAConnect.dto.GlobalAPIResponse;
+import com.bernhack.BCAConnect.dto.changePassword.ChangePasswordRequest;
 import com.bernhack.BCAConnect.service.UserService;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,11 @@ public class UserController extends BaseController {
     @DeleteMapping("/delete/me")
     public ResponseEntity<GlobalAPIResponse> deleteMe(){
         return successResponse(StringConstant.USER_DELETED,userService.deleteMe());
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<GlobalAPIResponse> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest){
+        return successResponse(StringConstant.PASSWORD_CHANGED,userService.changePassword(changePasswordRequest));
     }
 
 
