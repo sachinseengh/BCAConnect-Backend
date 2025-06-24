@@ -9,5 +9,5 @@ import lombok.Setter;
 public class VerifyPostRequest {
 
     private Long id;
-    private boolean isVerifed;
+    private boolean isVerified;
 }
