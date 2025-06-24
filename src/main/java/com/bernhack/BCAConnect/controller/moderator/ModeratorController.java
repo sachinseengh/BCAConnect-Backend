@@ -30,10 +30,10 @@ private ModeratorService moderatorService;
         return successResponse(StringConstant.UNVERIFIED_POST,moderatorService.getAllUnverifiedPosts());
     }
 
-//    @DeleteMapping("/delete/{username}")
-//    public ResponseEntity<GlobalAPIResponse> deleteUser(@PathVariable String username){
-//        return successResponse(StringConstant.USER_DELETED,userService.deleteUser(username));
-//    }
+    @DeleteMapping("/delete/{username}")
+    public ResponseEntity<GlobalAPIResponse> deleteUser(@PathVariable String username){
+        return successResponse(StringConstant.USER_DELETED,moderatorService.deleteUser(username));
+    }
 
 
     @PostMapping("/verifyPost")
