@@ -194,7 +194,7 @@ public class PostServiceImpl implements PostService {
                 List<String> roles = post.getUser().getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
 
                 UserResponse userResponse = new UserResponse(post.getUser()
-                        .getId(), post.getUser().getFullName(),post.getUser().getEmail(),post.getUser().getUserName() ,post.getUser().getSemester(), roles,posts);
+                        .getId(), post.getUser().getFullName(),post.getUser().getEmail(),post.getUser().getUserName() ,post.getUser().getSemester(), roles);
 
                 String fileUrl = null;
                 String fileType = null;
@@ -231,7 +231,7 @@ public class PostServiceImpl implements PostService {
                 List<String> roles = post.getUser().getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
 
                 UserResponse userResponse = new UserResponse(post.getUser()
-                        .getId(), post.getUser().getFullName(),post.getUser().getEmail(),post.getUser().getUserName() ,post.getUser().getSemester(), roles,posts);
+                        .getId(), post.getUser().getFullName(),post.getUser().getEmail(),post.getUser().getUserName() ,post.getUser().getSemester(), roles);
 
                 String fileUrl = null;
                 String fileType = null;

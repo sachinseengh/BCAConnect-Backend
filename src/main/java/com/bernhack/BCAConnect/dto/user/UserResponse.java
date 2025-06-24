@@ -22,5 +22,5 @@ private String email;
 private String userName;
 private String semester;
 private List<String> roles;
-private List<Posts> posts;
+
 }
