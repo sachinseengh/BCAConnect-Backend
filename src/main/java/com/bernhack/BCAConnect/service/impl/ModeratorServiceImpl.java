@@ -72,7 +72,7 @@ public class ModeratorServiceImpl implements ModeratorService {
         if(verifyPostRequest.isVerifed()){
 
             User user = post.getUser();
-            post.setIsVerifed(true);
+            post.setIsVerified(true);
 
             if(post.getIsNote()){
                 Notes note = new Notes();

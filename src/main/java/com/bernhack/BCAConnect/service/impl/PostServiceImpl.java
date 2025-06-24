@@ -57,7 +57,7 @@ public class PostServiceImpl implements PostService {
         post.setCaption(creatPostRequest.getCaption());
         post.setSemester(creatPostRequest.getSemester());
         post.setContent(creatPostRequest.getContent());
-        post.setIsVerifed(false);
+        post.setIsVerified(false);
         post.setDate(LocalDateTime.now());
 
         post.setUser(user);
@@ -115,7 +115,7 @@ public class PostServiceImpl implements PostService {
         }
 
         post.setIsNote(updatePostRequest.getIsNote());
-        post.setIsVerifed(false);
+        post.setIsVerified(false);
         post.setDate(LocalDateTime.now());
 
 

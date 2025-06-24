@@ -35,7 +35,7 @@ public class Posts {
 
     private Boolean isNote;
 
-    private Boolean isVerifed;
+    private Boolean isVerified;
 
     private LocalDateTime date;
 
