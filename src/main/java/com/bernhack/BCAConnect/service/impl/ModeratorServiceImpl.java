@@ -97,7 +97,7 @@ public class ModeratorServiceImpl implements ModeratorService {
     @Override
     public List<PostResponse> getAllUnverifiedPosts() {
 
-        List<Posts> posts = postRepository.getAllPosts().orElse(Collections.emptyList());
+        List<Posts> posts = postRepository.findAllUnverifiedPosts().orElse(Collections.emptyList());
 
         List<PostResponse> responses = new ArrayList<>();
 
