@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Posts,Long> {
 
-@Query(value="select * from posts p order by p.id desc ",nativeQuery = true)
+@Query(value="select * from posts p where p.is_Verified=true order by p.id desc ",nativeQuery = true)
 Optional<List<Posts>> getAllPosts();
 
     Optional<Posts> findById(Long id);

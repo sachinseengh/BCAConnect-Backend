@@ -73,15 +73,21 @@ public class ModeratorServiceImpl implements ModeratorService {
 
             User user = post.getUser();
             post.setIsVerifed(true);
-            Notes note = new Notes();
-            note.setSemester(post.getSemester());
-            note.setSubject(post.getSubject());
-            note.setFileName(post.getFilename());
-            note.setDate(LocalDateTime.now());
-            note.setUser(user);
-            noteRepository.save(note);
+
+            if(post.getIsNote()){
+                Notes note = new Notes();
+                note.setSemester(post.getSemester());
+                note.setSubject(post.getSubject());
+                note.setFileName(post.getFilename());
+                note.setDate(LocalDateTime.now());
+                note.setUser(user);
+                noteRepository.save(note);
+            }
+
+            postRepository.save(post);
 
             return StringConstant.POST_VERIFIED;
+
         }else{
             postRepository.delete(post);
             return StringConstant.POST_DECLINED;
