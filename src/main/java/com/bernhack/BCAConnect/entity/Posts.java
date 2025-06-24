@@ -28,8 +28,15 @@ public class Posts {
     @Column( nullable = false)
     private String content;
 
-    private LocalDateTime date;
+    private String filename;
 
+    private String fileType;
+
+    private Boolean isNote;
+
+    private Boolean isVerifed;
+
+    private LocalDateTime date;
 
     @ManyToOne()
     @JoinColumn(name = "user_id")

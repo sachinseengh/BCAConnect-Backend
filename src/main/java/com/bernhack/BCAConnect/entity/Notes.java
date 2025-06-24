@@ -25,13 +25,6 @@ public class Notes {
     @Column(nullable = false)
     private String subject;
 
-
-    @Column(nullable = false)
-    private String caption;
-
-    @Column(nullable=false)
-    private String content;
-
     private LocalDateTime date;
 
     private String fileName;
