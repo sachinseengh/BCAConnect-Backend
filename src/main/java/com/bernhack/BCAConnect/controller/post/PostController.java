@@ -55,10 +55,7 @@ public class PostController extends BaseController {
     }
 
 
-    @PostMapping("/verify")
-    public ResponseEntity<GlobalAPIResponse> verifyPost(@RequestBody VerifyPostRequest verifyPostRequest){
-        return successResponse(StringConstant.POST_VERIFICATION,postService.postVerification(verifyPostRequest));
-    }
+
 
 
 }

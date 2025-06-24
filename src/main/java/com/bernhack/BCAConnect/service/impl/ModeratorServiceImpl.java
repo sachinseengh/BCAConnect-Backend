@@ -2,11 +2,15 @@ package com.bernhack.BCAConnect.service.impl;
 
 
 import com.bernhack.BCAConnect.Exception.AppException;
+import com.bernhack.BCAConnect.constant.StringConstant;
 import com.bernhack.BCAConnect.dto.post.PostResponse;
+import com.bernhack.BCAConnect.dto.post.VerifyPostRequest;
 import com.bernhack.BCAConnect.dto.user.UserResponse;
+import com.bernhack.BCAConnect.entity.Notes;
 import com.bernhack.BCAConnect.entity.Posts;
 import com.bernhack.BCAConnect.entity.Role;
 import com.bernhack.BCAConnect.entity.User;
+import com.bernhack.BCAConnect.repository.NoteRepository;
 import com.bernhack.BCAConnect.repository.PostRepository;
 import com.bernhack.BCAConnect.repository.UserRepository;
 import com.bernhack.BCAConnect.service.ModeratorService;
@@ -14,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +31,9 @@ public class ModeratorServiceImpl implements ModeratorService {
     private UserRepository userRepository;
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private NoteRepository noteRepository;
 
 
     @Override
@@ -53,6 +61,31 @@ public class ModeratorServiceImpl implements ModeratorService {
         User user = userRepository.findByUserName(username).orElseThrow(()->new AppException("User not found"));
         userRepository.delete(user);
         return user.getId();
+    }
+
+
+    @Override
+    public String postVerification(VerifyPostRequest verifyPostRequest) {
+
+        Posts post = postRepository.findById(verifyPostRequest.getId()).orElseThrow(()->new AppException("Post Not Found"));
+
+        if(verifyPostRequest.isVerifed()){
+
+            User user = post.getUser();
+            post.setIsVerifed(true);
+            Notes note = new Notes();
+            note.setSemester(post.getSemester());
+            note.setSubject(post.getSubject());
+            note.setFileName(post.getFilename());
+            note.setDate(LocalDateTime.now());
+            note.setUser(user);
+            noteRepository.save(note);
+
+            return StringConstant.POST_VERIFIED;
+        }else{
+            postRepository.delete(post);
+            return StringConstant.POST_DECLINED;
+        }
     }
 
     @Override

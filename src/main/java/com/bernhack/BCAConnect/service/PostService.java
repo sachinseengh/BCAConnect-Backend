@@ -21,7 +21,6 @@ public interface PostService {
     String deletePost(Long id);
 
 
-    String postVerification(VerifyPostRequest verifyPostRequest);
 
     List<PostResponse> getAllPosts();
 

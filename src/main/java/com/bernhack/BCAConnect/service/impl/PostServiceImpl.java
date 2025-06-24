@@ -158,29 +158,6 @@ public class PostServiceImpl implements PostService {
     }
 
 
-    @Override
-    public String postVerification(VerifyPostRequest verifyPostRequest) {
-
-        Posts post = postRepository.findById(verifyPostRequest.getId()).orElseThrow(()->new AppException("Post Not Found"));
-
-        if(verifyPostRequest.isVerifed()){
-
-            User user = post.getUser();
-            post.setIsVerifed(true);
-            Notes note = new Notes();
-            note.setSemester(post.getSemester());
-            note.setSubject(post.getSubject());
-            note.setFileName(post.getFilename());
-            note.setDate(LocalDateTime.now());
-            note.setUser(user);
-            noteRepository.save(note);
-
-            return StringConstant.POST_VERIFIED;
-        }else{
-            postRepository.delete(post);
-            return StringConstant.POST_DECLINED;
-        }
-    }
 
     @Override
     public List<PostResponse> getAllPosts() {
