@@ -29,10 +29,7 @@ public class UserController extends BaseController {
         return  successResponse(StringConstant.USER_FETCHED,userService.getMe());
     }
 
-    @DeleteMapping("/delete/{username}")
-    public ResponseEntity<GlobalAPIResponse> deleteUser(@PathVariable String username){
-        return successResponse(StringConstant.USER_DELETED,userService.deleteUser(username));
-    }
+
     @DeleteMapping("/delete/me")
     public ResponseEntity<GlobalAPIResponse> deleteMe(){
         return successResponse(StringConstant.USER_DELETED,userService.deleteMe());

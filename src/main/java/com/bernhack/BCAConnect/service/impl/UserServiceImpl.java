@@ -90,13 +90,6 @@ public class UserServiceImpl implements UserService {
         return getUser(username);
     }
 
-    @Override
-    public Long deleteUser(String username) {
-
-        User user = userRepository.findByUserName(username).orElseThrow(()->new AppException("User not found"));
-        userRepository.delete(user);
-        return user.getId();
-    }
 
     @Override
     public Long deleteMe() {
@@ -104,7 +97,11 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String username = authentication.getName();
-        return deleteUser(username);
+
+        User user = userRepository.findByUserName(username).orElseThrow(()->new AppException("User not found"));
+        userRepository.delete(user);
+        return user.getId();
+
     }
 
     @Override

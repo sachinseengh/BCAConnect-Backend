@@ -21,4 +21,6 @@ public class StringConstant {
     public static final String POST_VERIFICATION = "Post Verification";
     public static final String POST_FETCHED ="Post Fetched" ;
     public static final String USER_POSTS ="User Posts" ;
+    public static final String FETCH_ALL_USER = "Users Fetched";
+    public static final String UNVERIFIED_POST ="Unverifed Users" ;
 }

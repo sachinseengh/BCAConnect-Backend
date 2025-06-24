@@ -15,7 +15,7 @@ public interface UserService {
 
  UserResponse getMe();
 
- Long deleteUser(String username);
+
 
  Long deleteMe();
 
