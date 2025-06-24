@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
              http
                      .authorizeRequests()
                      .antMatchers("/auth/**").permitAll()
+                     .antMatchers("/uploads/**").permitAll()
                      .antMatchers("/user/**").authenticated()
                      .anyRequest().authenticated();
 
@@ -52,7 +53,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return request -> {
             CorsConfiguration config = new CorsConfiguration();
             config.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
-//            config.setAllowedOrigins(Collections.singletonList("https://college-book.vercel.app/"));
             config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Specify allowed methods
             config.setAllowCredentials(true);
             config.setAllowedHeaders(Collections.singletonList("*"));
