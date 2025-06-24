@@ -57,6 +57,7 @@ public class PostServiceImpl implements PostService {
         post.setCaption(creatPostRequest.getCaption());
         post.setSemester(creatPostRequest.getSemester());
         post.setContent(creatPostRequest.getContent());
+        post.setIsNote(creatPostRequest.getIsNote());
         post.setIsVerified(false);
         post.setDate(LocalDateTime.now());
 

@@ -8,4 +8,10 @@ public interface AdminService {
 
 
 
+    List<UserResponse> getAllModerators(String roleName);
+
+    String makeModerator(String username);
+
+
+    String removeModerator(String username);
 }

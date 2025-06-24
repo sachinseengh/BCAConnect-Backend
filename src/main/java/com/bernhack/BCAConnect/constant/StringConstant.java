@@ -23,4 +23,8 @@ public class StringConstant {
     public static final String USER_POSTS ="User Posts" ;
     public static final String FETCH_ALL_USER = "Users Fetched";
     public static final String UNVERIFIED_POST ="Unverifed Users" ;
+    public static final String MODERATOR_MADE ="Moderator Made" ;
+
+    public static final String FETCH_MODERATOR = "Moderators Fetched";
+    public static final String MODERATOR_REMOVED ="Modrator Removed" ;
 }

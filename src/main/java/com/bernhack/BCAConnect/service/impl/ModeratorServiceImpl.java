@@ -8,7 +8,7 @@ import com.bernhack.BCAConnect.dto.post.VerifyPostRequest;
 import com.bernhack.BCAConnect.dto.user.UserResponse;
 import com.bernhack.BCAConnect.entity.Notes;
 import com.bernhack.BCAConnect.entity.Posts;
-import com.bernhack.BCAConnect.entity.Role;
+
 import com.bernhack.BCAConnect.entity.User;
 import com.bernhack.BCAConnect.repository.NoteRepository;
 import com.bernhack.BCAConnect.repository.PostRepository;
@@ -58,6 +58,12 @@ public class ModeratorServiceImpl implements ModeratorService {
     @Override
     public Long deleteUser(String username) {
 
+        Boolean a =userRepository.findUserWithRoleAdminOrModerator(username);
+
+        if(userRepository.findUserWithRoleAdminOrModerator(username)){
+            throw new AppException("Admin or Moderator cannot be deleted");
+        }
+
         User user = userRepository.findByUserName(username).orElseThrow(()->new AppException("User not found"));
         userRepository.delete(user);
         return user.getId();
@@ -70,13 +76,13 @@ public class ModeratorServiceImpl implements ModeratorService {
         Posts post = postRepository.findById(verifyPostRequest.getId()).orElseThrow(()->new AppException("Post Not Found"));
 
 
-
         if(verifyPostRequest.getVerified()==1){
 
             User user = post.getUser();
             post.setIsVerified(true);
 
             if(post.getIsNote()!=null){
+
                 Notes note = new Notes();
                 note.setSemester(post.getSemester());
                 note.setSubject(post.getSubject());
@@ -84,6 +90,7 @@ public class ModeratorServiceImpl implements ModeratorService {
                 note.setDate(LocalDateTime.now());
                 note.setUser(user);
                 noteRepository.save(note);
+
             }
 
             postRepository.save(post);
