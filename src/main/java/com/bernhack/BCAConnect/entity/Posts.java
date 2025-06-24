@@ -28,6 +28,7 @@ public class Posts {
     @Column( nullable = false)
     private String content;
 
+
     private String filename;
 
     private String fileType;

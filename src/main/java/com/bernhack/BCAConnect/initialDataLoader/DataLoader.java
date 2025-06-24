@@ -8,6 +8,7 @@ import com.bernhack.BCAConnect.repository.RoleRepository;
 import com.bernhack.BCAConnect.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,6 +18,8 @@ public class DataLoader implements CommandLineRunner {
     private RoleRepository roleRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
 //    @Autowired
@@ -54,8 +57,8 @@ public class DataLoader implements CommandLineRunner {
             user.setUserName("sachin");
             user.setEmail("sachinseengh@gmail.com");
             user.setSemester("Sixth");
-//            String password = passwordEncoder.encode("sachin");
-            user.setPassword("sachin");
+            String password = passwordEncoder.encode("sachin");
+            user.setPassword(password);
             user.getRoles().add(role);
             userRepository.save(user);
         }

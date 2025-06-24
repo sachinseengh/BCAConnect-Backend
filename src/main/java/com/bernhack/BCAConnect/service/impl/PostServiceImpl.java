@@ -2,9 +2,11 @@ package com.bernhack.BCAConnect.service.impl;
 
 import com.bernhack.BCAConnect.Exception.AppException;
 import com.bernhack.BCAConnect.constant.StringConstant;
+import com.bernhack.BCAConnect.dto.post.PostResponse;
 import com.bernhack.BCAConnect.dto.post.UpdatePostRequest;
 import com.bernhack.BCAConnect.dto.post.CreatPostRequest;
 import com.bernhack.BCAConnect.dto.post.VerifyPostRequest;
+import com.bernhack.BCAConnect.dto.user.UserResponse;
 import com.bernhack.BCAConnect.entity.Notes;
 import com.bernhack.BCAConnect.entity.Posts;
 import com.bernhack.BCAConnect.entity.User;
@@ -17,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -25,8 +28,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -176,6 +179,77 @@ public class PostServiceImpl implements PostService {
         }else{
             postRepository.delete(post);
             return StringConstant.POST_DECLINED;
+        }
+    }
+
+    @Override
+    public List<PostResponse> getAllPosts() {
+        List<Posts> posts = postRepository.getAllPosts().orElse(Collections.emptyList());
+//
+        List<PostResponse> responses = new ArrayList<>();
+
+        if (posts != null) {
+            for (Posts post : posts) {
+
+                List<String> roles = post.getUser().getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
+
+                UserResponse userResponse = new UserResponse(post.getUser()
+                        .getId(), post.getUser().getFullName(),post.getUser().getEmail(),post.getUser().getUserName() ,post.getUser().getSemester(), roles,posts);
+
+                String fileUrl = null;
+                String fileType = null;
+                String fileName=null;
+                if (post.getFilename() != null) {
+                    fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                            .path("/uploads/")
+                            .path(post.getFilename())
+                            .toUriString();
+                    fileType = post.getFileType();
+                    fileName=post.getFilename();
+
+
+                }
+
+                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getDate(), userResponse, fileUrl, fileType,fileName));
+            }
+            return responses;
+        }
+        return responses;
+    }
+
+    @Override
+    public List<PostResponse> getUserPost(String username) {
+
+        User user = userRepository.findByUserName(username).orElseThrow(() -> new AppException("User not found"));
+
+        List<Posts> posts = postRepository.findAllByUserOrderByDateDesc(user).orElse(Collections.emptyList());
+        List<PostResponse> responses = new ArrayList<>();
+
+        if (posts != null) {
+            for (Posts post : posts) {
+
+                List<String> roles = post.getUser().getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
+
+                UserResponse userResponse = new UserResponse(post.getUser()
+                        .getId(), post.getUser().getFullName(),post.getUser().getEmail(),post.getUser().getUserName() ,post.getUser().getSemester(), roles,posts);
+
+                String fileUrl = null;
+                String fileType = null;
+                String fileName =null;
+
+                if (post.getFilename() != null) {
+                    fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                            .path("/uploads/")
+                            .path(post.getFilename())
+                            .toUriString();
+                    fileType = post.getFileType();
+                }
+
+                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getDate(), userResponse, fileUrl, fileType,fileName));
+            }
+            return responses;
+        } else {
+            return responses;
         }
     }
 

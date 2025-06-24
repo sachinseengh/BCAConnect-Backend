@@ -38,13 +38,27 @@ public class PostController extends BaseController {
         return successResponse(StringConstant.POST_UPDATED,postService.updatePost(updatePostRequest));
     }
 
-    @DeleteMapping("/{post_id}")
+
+    @GetMapping("/getAllPosts")
+    public ResponseEntity<GlobalAPIResponse> getAllPosts(){
+        return successResponse(StringConstant.POST_FETCHED,postService.getAllPosts());
+    }
+
+    @DeleteMapping("/delete/{post_id}")
     public ResponseEntity<GlobalAPIResponse> deletePost(@PathVariable Long post_id){
         return successResponse(StringConstant.POST_DELETED,postService.deletePost(post_id));
     }
+
+    @PostMapping("/getUserPost/{username}")
+    public ResponseEntity<GlobalAPIResponse> getUserPost(@PathVariable String username){
+        return successResponse(StringConstant.USER_POSTS,postService.getUserPost(username));
+    }
+
 
     @PostMapping("/verify")
     public ResponseEntity<GlobalAPIResponse> verifyPost(@RequestBody VerifyPostRequest verifyPostRequest){
         return successResponse(StringConstant.POST_VERIFICATION,postService.postVerification(verifyPostRequest));
     }
+
+
 }

@@ -19,4 +19,6 @@ public class StringConstant {
     public static final String POST_VERIFIED = "Post Verification";
     public static final String POST_DECLINED = "Post Declined";
     public static final String POST_VERIFICATION = "Post Verification";
+    public static final String POST_FETCHED ="Post Fetched" ;
+    public static final String USER_POSTS ="User Posts" ;
 }
