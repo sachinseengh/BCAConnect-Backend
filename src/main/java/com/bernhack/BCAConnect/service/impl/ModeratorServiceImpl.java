@@ -2,6 +2,7 @@ package com.bernhack.BCAConnect.service.impl;
 
 
 import com.bernhack.BCAConnect.Exception.AppException;
+import com.bernhack.BCAConnect.dto.post.PostResponse;
 import com.bernhack.BCAConnect.dto.user.UserResponse;
 import com.bernhack.BCAConnect.entity.Posts;
 import com.bernhack.BCAConnect.entity.Role;
@@ -11,8 +12,10 @@ import com.bernhack.BCAConnect.repository.UserRepository;
 import com.bernhack.BCAConnect.service.ModeratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,10 +56,38 @@ public class ModeratorServiceImpl implements ModeratorService {
     }
 
     @Override
-    public List<Posts> getAllUnverifiedPosts() {
+    public List<PostResponse> getAllUnverifiedPosts() {
 
-        List<Posts> unverifiedPosts = postRepository.getAllPosts().orElseThrow(null);
-        return unverifiedPosts;
+        List<Posts> posts = postRepository.getAllPosts().orElse(Collections.emptyList());
 
+        List<PostResponse> responses = new ArrayList<>();
+
+        if (posts != null) {
+            for (Posts post : posts) {
+
+                List<String> roles = post.getUser().getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
+
+                UserResponse userResponse = new UserResponse(post.getUser()
+                        .getId(), post.getUser().getFullName(), post.getUser().getEmail(), post.getUser().getUserName(), post.getUser().getSemester(), roles);
+
+                String fileUrl = null;
+                String fileType = null;
+                String fileName = null;
+                if (post.getFilename() != null) {
+                    fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                            .path("/uploads/")
+                            .path(post.getFilename())
+                            .toUriString();
+                    fileType = post.getFileType();
+                    fileName = post.getFilename();
+
+
+                }
+
+                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(), post.getSemester(), post.getDate(), userResponse, fileUrl, fileType, fileName));
+            }
+            return responses;
+        }
+        return responses;
     }
 }
