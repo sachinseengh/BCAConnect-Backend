@@ -51,6 +51,7 @@ public class AdminServiceImpl implements AdminService {
         Role role = roleRepository.findByName(RoleEnum.MODERATOR.name()).orElseThrow(()-> new AppException("Role not Found"));
 
         user.getRoles().add(role);
+        userRepository.save(user);
 
         return StringConstant.MODERATOR_MADE;
     }
@@ -63,6 +64,7 @@ public class AdminServiceImpl implements AdminService {
         Role role = roleRepository.findByName(RoleEnum.MODERATOR.name()).orElseThrow(()->new AppException("Role not found"));
 
         user.getRoles().remove(role);
+        userRepository.save(user);
         return "";
     }
 

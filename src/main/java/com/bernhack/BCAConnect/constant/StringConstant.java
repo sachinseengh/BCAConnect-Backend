@@ -27,4 +27,7 @@ public class StringConstant {
 
     public static final String FETCH_MODERATOR = "Moderators Fetched";
     public static final String MODERATOR_REMOVED ="Modrator Removed" ;
+
+    public static final String APP_EXCEPTION="App Excepiton";
+    public static final String USER_NOT_FOUND = "User not Found";
 }
