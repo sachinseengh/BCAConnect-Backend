@@ -1,13 +1,13 @@
 package com.bernhack.BCAConnect.dto.post;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 public class VerifyPostRequest {
 
     private Long id;
-    private boolean isVerified;
+    private int verified;
+
 }
