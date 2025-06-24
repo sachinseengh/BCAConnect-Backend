@@ -20,11 +20,13 @@ public class PostResponse {
     private String content;
     private String subject;
     private String semester;
-    private boolean isNote;
     private LocalDateTime date;
     private UserResponse userResponse;
     private String fileUrl;
     private String fileType;
     private String filename;
+
+
+
 
 }

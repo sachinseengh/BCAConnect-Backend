@@ -188,7 +188,7 @@ public class PostServiceImpl implements PostService {
 
                 }
 
-                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getIsNote(),post.getDate(), userResponse, fileUrl, fileType,fileName));
+                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getDate(), userResponse, fileUrl, fileType,fileName));
             }
             return responses;
         }
@@ -223,7 +223,7 @@ public class PostServiceImpl implements PostService {
                     fileType = post.getFileType();
                 }
 
-                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getIsNote(),post.getDate(), userResponse, fileUrl, fileType,fileName));
+                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getDate(), userResponse, fileUrl, fileType,fileName));
             }
             return responses;
         } else {
