@@ -6,6 +6,7 @@ import com.bernhack.BCAConnect.dto.user.UserResponse;
 import com.bernhack.BCAConnect.entity.Posts;
 import com.bernhack.BCAConnect.entity.Role;
 import com.bernhack.BCAConnect.entity.User;
+import com.bernhack.BCAConnect.repository.PostRepository;
 import com.bernhack.BCAConnect.repository.UserRepository;
 import com.bernhack.BCAConnect.service.ModeratorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class ModeratorServiceImpl implements ModeratorService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PostRepository postRepository;
+
 
     @Override
     public List<UserResponse> getAllUsers() {
@@ -50,6 +54,9 @@ public class ModeratorServiceImpl implements ModeratorService {
 
     @Override
     public List<Posts> getAllUnverifiedPosts() {
-        return null;
+
+        List<Posts> unverifiedPosts = postRepository.getAllPosts().orElseThrow(null);
+        return unverifiedPosts;
+
     }
 }

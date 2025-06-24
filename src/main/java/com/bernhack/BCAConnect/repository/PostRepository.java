@@ -20,4 +20,7 @@ Optional<List<Posts>> getAllPosts();
     Optional<List<Posts>> findAllByUserOrderByDateDesc(User user);
 
 
+
+    @Query(value = "select * from posts p where p.is_verified=false",nativeQuery = true)
+    Optional<List<Posts>> findAllUnverifiedPosts();
 }

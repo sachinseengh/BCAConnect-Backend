@@ -15,4 +15,6 @@ public interface ModeratorService {
 
 
     List<Posts> getAllUnverifiedPosts();
+
+
 }
