@@ -69,12 +69,14 @@ public class ModeratorServiceImpl implements ModeratorService {
 
         Posts post = postRepository.findById(verifyPostRequest.getId()).orElseThrow(()->new AppException("Post Not Found"));
 
+
+
         if(verifyPostRequest.getVerified()==1){
 
             User user = post.getUser();
             post.setIsVerified(true);
 
-            if(post.getIsNote()){
+            if(post.getIsNote()!=null){
                 Notes note = new Notes();
                 note.setSemester(post.getSemester());
                 note.setSubject(post.getSubject());
