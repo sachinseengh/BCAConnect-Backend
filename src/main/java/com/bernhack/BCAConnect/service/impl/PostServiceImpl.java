@@ -5,7 +5,7 @@ import com.bernhack.BCAConnect.constant.StringConstant;
 import com.bernhack.BCAConnect.dto.post.PostResponse;
 import com.bernhack.BCAConnect.dto.post.UpdatePostRequest;
 import com.bernhack.BCAConnect.dto.post.CreatPostRequest;
-import com.bernhack.BCAConnect.dto.post.VerifyPostRequest;
+
 import com.bernhack.BCAConnect.dto.user.UserResponse;
 import com.bernhack.BCAConnect.entity.Notes;
 import com.bernhack.BCAConnect.entity.Posts;
@@ -188,7 +188,7 @@ public class PostServiceImpl implements PostService {
 
                 }
 
-                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getDate(), userResponse, fileUrl, fileType,fileName));
+                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getIsNote(),post.getDate(), userResponse, fileUrl, fileType,fileName));
             }
             return responses;
         }
@@ -223,7 +223,7 @@ public class PostServiceImpl implements PostService {
                     fileType = post.getFileType();
                 }
 
-                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getDate(), userResponse, fileUrl, fileType,fileName));
+                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getIsNote(),post.getDate(), userResponse, fileUrl, fileType,fileName));
             }
             return responses;
         } else {

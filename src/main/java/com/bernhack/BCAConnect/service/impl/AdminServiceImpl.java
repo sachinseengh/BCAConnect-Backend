@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,12 +46,20 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public String makeModerator(String username) {
 
-        User user = userRepository.findByUserName(username).orElseThrow(()->new AppException("Username not found"));
 
-        Role role = roleRepository.findByName(RoleEnum.MODERATOR.name()).orElseThrow(()-> new AppException("Role not Found"));
 
-        user.getRoles().add(role);
-        userRepository.save(user);
+
+
+        if(userRepository.findUserWithRoleAdminOrModerator(username)){
+            throw new AppException("Already a Moderator");
+        }else{
+            User user = userRepository.findByUserName(username).orElseThrow(()->new AppException("Username not found"));
+
+            Role role = roleRepository.findByName(RoleEnum.MODERATOR.name()).orElseThrow(()-> new AppException("Role not Found"));
+
+            user.getRoles().add(role);
+            userRepository.save(user);
+        }
 
         return StringConstant.MODERATOR_MADE;
     }

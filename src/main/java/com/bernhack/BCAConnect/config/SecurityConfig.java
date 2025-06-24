@@ -1,6 +1,7 @@
 package com.bernhack.BCAConnect.config;
 
 
+import com.bernhack.BCAConnect.enums.RoleEnum;
 import com.bernhack.BCAConnect.filter.JwtFilter;
 import com.bernhack.BCAConnect.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
              http
                      .authorizeRequests()
                      .antMatchers("/auth/**").permitAll()
-                     .antMatchers("/uploads/**").permitAll()
-                     .antMatchers("/user/**").authenticated()
+                     .antMatchers("/").permitAll()
+                     .antMatchers("/admin/**").hasRole(RoleEnum.ADMIN.name())
+                     .antMatchers("/moderator/**").hasAnyRole(RoleEnum.ADMIN.name(),RoleEnum.MODERATOR.name())
+                     .antMatchers("/user/**","/post/**","/note/**").authenticated()
                      .anyRequest().authenticated();
 
         http.cors().configurationSource(corsConfigurationSource());
@@ -75,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    //it is used for jwt
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
