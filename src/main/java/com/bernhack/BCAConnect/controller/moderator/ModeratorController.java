@@ -19,7 +19,6 @@ public class ModeratorController extends BaseController {
 private ModeratorService moderatorService;
 
 
-
     @GetMapping("/getUsers")
     public ResponseEntity<GlobalAPIResponse> getAllUsers(){
         return successResponse(StringConstant.FETCH_ALL_USER,moderatorService.getAllUsers());

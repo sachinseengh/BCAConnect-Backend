@@ -21,11 +21,6 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-
-
     @Override
     public void run(String... args)  {
         loadRoles();

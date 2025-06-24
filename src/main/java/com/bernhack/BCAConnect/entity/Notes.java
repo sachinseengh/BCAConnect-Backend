@@ -28,6 +28,7 @@ public class Notes {
     private LocalDateTime date;
 
     private String fileName;
+    private String fileType;
 
     @ManyToOne()
     @JoinColumn(name="user_id")
