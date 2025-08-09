@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,21 @@ public class User {
     private Long id;
 
 
+    private String authProvider;
+
+    // for email verification
+    @Column(name="token_created_at")
+    private LocalDateTime tokenCreatedAt;
+
+    @Column(nullable = false,columnDefinition = "boolean default false")
+    private boolean enabled=false;
+
+
+    @Column(name="forget_password_token_created_at")
+    private LocalDateTime forgetTokenCreatedAt;
+
+
+
     @Column(nullable = false)
     private String fullName;
 
@@ -31,8 +47,6 @@ public class User {
     @Column(nullable=false,unique = true)
     private String email;
 
-    @Column(nullable = false,unique=true)
-    private String userName;
 
     @Column(nullable = false)
     private String password;

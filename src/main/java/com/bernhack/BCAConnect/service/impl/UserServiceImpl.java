@@ -23,7 +23,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,15 +54,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public String register(RegisterRequest registerRequest) {
 
-        checkEmail(registerRequest.getEmail());
-        checkUsername(registerRequest.getUserName());
+
+        Optional<User> existingUser = userRepository.findByEmail(registerRequest.getEmail());
+
+        if (existingUser.isPresent()) {
+            String message = "Username already exists with provider: " + existingUser.get().getAuthProvider();
+            throw new AppException(message);  // This will be caught by your GlobalExceptionHandler
+        }
+
+
 
         User user = new User();
         user.setFullName(registerRequest.getFullName());
         user.setEmail(registerRequest.getEmail());
         user.setSemester(registerRequest.getSemester());
         user.setSemester(registerRequest.getSemester());
-        user.setUserName(registerRequest.getUserName());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 
         Role role = roleRepository.findByName(RoleEnum.USER.toString()).orElseThrow(()->new AppException(StringConstant.ROLE_EXCEPTION));
@@ -71,13 +80,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String login(LoginRequest loginRequest) {
+
+        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(()->new AppException("User not found"));
+
+
+        if (!user.isEnabled()) {
+            Duration diff = Duration.between(user.getTokenCreatedAt(), LocalDateTime.now());
+
+            if (diff.toMinutes() > 15) {
+                throw new AppException("TokenExpired"); // frontend will handle this specifically
+            }
+
+            throw new AppException("Email not verified");
+        }
+
+        try{
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getEmail(),loginRequest.getPassword())
+            );
+            UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(loginRequest.getEmail());
+            String jwt =jwtUtil.generateToken(userDetails.getUsername());
+            return jwt;
+
+        }catch (Exception e){
+
+            throw new AppException(StringConstant.INVALID_CREDENTIALS);
+
+        }
+    }
+
+
+    @Override
     public UserResponse getUser(String userName) {
 
-        User user = userRepository.findByUserName(userName).orElseThrow(()->new AppException("User not found"));
+        User user = userRepository.findByEmail(userName).orElseThrow(()->new AppException("User not found"));
 
         List<String> roles = user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
 
-         return new UserResponse(user.getId(),user.getFullName(),user.getEmail(),user.getSemester(),user.getSemester(),roles);
+         return new UserResponse(user.getId(),user.getFullName(),user.getEmail(),user.getSemester(),roles);
 
     }
 
@@ -98,7 +139,7 @@ public class UserServiceImpl implements UserService {
 
         String username = authentication.getName();
 
-        User user = userRepository.findByUserName(username).orElseThrow(()->new AppException("User not found"));
+        User user = userRepository.findByEmail(username).orElseThrow(()->new AppException("User not found"));
         userRepository.delete(user);
         return user.getId();
 
@@ -109,7 +150,7 @@ public class UserServiceImpl implements UserService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User user = userRepository.findByUserName(authentication.getName()).orElseThrow(()->new AppException("User not found"));
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(()->new AppException("User not found"));
 
 
         if(!passwordEncoder.matches(changePasswordRequest.getOldPassword(),user.getPassword())){
@@ -122,40 +163,9 @@ public class UserServiceImpl implements UserService {
         return StringConstant.PASSWORD_CHANGED;
     }
 
-    @Override
-    public String login(LoginRequest loginRequest) {
-
-        User user = userRepository.findByUserName(loginRequest.getUserName()).orElseThrow(()->new AppException("User not found"));
 
 
-        try{
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUserName(),loginRequest.getPassword())
-            );
-            UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(loginRequest.getUserName());
-            String jwt =jwtUtil.generateToken(userDetails.getUsername());
-            return jwt;
 
-        }catch (Exception e){
-
-            throw new AppException(StringConstant.INVALID_CREDENTIALS);
-
-        }
-    }
-
-
-    public void checkEmail(String email){
-
-        if(userRepository.findByEmail(email).isPresent()){
-            throw new AppException("Email Already Exists");
-        }
-    }
-
-    public void checkUsername(String username){
-        if(userRepository.findByUserName(username).isPresent()){
-            throw new AppException("Username Already Exists");
-        }
-    }
 
 }
 

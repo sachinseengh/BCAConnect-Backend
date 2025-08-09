@@ -38,7 +38,7 @@ public class AdminServiceImpl implements AdminService {
             List<String> roles = user.getRoles().stream().map(role ->
                 role.getName()).collect(Collectors.toList());
 
-            responses.add(new UserResponse(user.getId(), user.getFullName(), user.getEmail(), user.getUserName(), user.getSemester(), roles));
+            responses.add(new UserResponse(user.getId(), user.getFullName(), user.getEmail(), user.getSemester(), roles));
         }
         return responses;
     }
@@ -53,7 +53,7 @@ public class AdminServiceImpl implements AdminService {
         if(userRepository.findUserWithRoleAdminOrModerator(username)){
             throw new AppException("Already a Moderator");
         }else{
-            User user = userRepository.findByUserName(username).orElseThrow(()->new AppException("Username not found"));
+            User user = userRepository.findByEmail(username).orElseThrow(()->new AppException("Username not found"));
 
             Role role = roleRepository.findByName(RoleEnum.MODERATOR.name()).orElseThrow(()-> new AppException("Role not Found"));
 
@@ -67,7 +67,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public String removeModerator(String username) {
 
-        User user = userRepository.findByUserName(username).orElseThrow(()->new AppException("User not Found"));
+        User user = userRepository.findByEmail(username).orElseThrow(()->new AppException("User not Found"));
 
         Role role = roleRepository.findByName(RoleEnum.MODERATOR.name()).orElseThrow(()->new AppException("Role not found"));
 

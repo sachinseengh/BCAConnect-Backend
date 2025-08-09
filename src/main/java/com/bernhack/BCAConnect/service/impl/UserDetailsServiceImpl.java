@@ -23,11 +23,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional // Needed to avoid LazyInitializationException for roles
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(username)
+        User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new AppException("User not found with username: " + username));
 
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUserName())
+                .username(user.getEmail())
                 .password(user.getPassword())
                 .authorities(
                         user.getRoles()

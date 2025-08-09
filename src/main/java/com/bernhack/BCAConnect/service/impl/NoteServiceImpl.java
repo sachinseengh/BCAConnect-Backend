@@ -36,7 +36,7 @@ public class NoteServiceImpl implements NoteService {
                 List<String> roles = note.getUser().getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
 
                 UserResponse userResponse = new UserResponse(note.getUser()
-                        .getId(), note.getUser().getFullName(), note.getUser().getEmail(), note.getUser().getUserName(),note.getUser().getSemester(), roles);
+                        .getId(), note.getUser().getFullName(), note.getUser().getEmail(), note.getUser().getSemester(), roles);
 
                 String fileUrl = null;
                 String fileType = null;

@@ -1,11 +1,14 @@
 package com.bernhack.BCAConnect.utils;
 
+import com.bernhack.BCAConnect.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,5 +65,21 @@ public class JwtUtil {
     }
 
 
+
+    public String generateVerificationToken(User user) {
+
+        Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+        try {
+            return Jwts.builder()
+                    .setSubject(user.getEmail())
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + 15 * 60 * 1000)) // 15 minutes
+                    .signWith(key)
+                    .compact();
+        } catch (Exception e) {
+            e.printStackTrace(); // Log to console
+            throw new RuntimeException("Failed to generate token: " + e.getMessage(), e);
+        }
+    }
 }
 

@@ -49,7 +49,7 @@ public class PostServiceImpl implements PostService {
 
         String username = authentication.getName();
 
-        User user = userRepository.findByUserName(username).orElseThrow(()->new AppException("User not found"));
+        User user = userRepository.findByEmail(username).orElseThrow(()->new AppException("User not found"));
 
         Posts post = new Posts();
 
@@ -92,7 +92,7 @@ public class PostServiceImpl implements PostService {
 
         Posts post = postRepository.findById(updatePostRequest.getPost_id()).orElseThrow(()->new AppException("Post Not Found"));
 
-        User user = userRepository.findByUserName(username).orElseThrow(()->new AppException("User not found"));
+        User user = userRepository.findByEmail(username).orElseThrow(()->new AppException("User not found"));
 
 
         if(updatePostRequest.getSubject() !=null || !(updatePostRequest.getSubject().equals(""))){
@@ -172,7 +172,7 @@ public class PostServiceImpl implements PostService {
                 List<String> roles = post.getUser().getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
 
                 UserResponse userResponse = new UserResponse(post.getUser()
-                        .getId(), post.getUser().getFullName(),post.getUser().getEmail(),post.getUser().getUserName() ,post.getUser().getSemester(), roles);
+                        .getId(), post.getUser().getFullName(),post.getUser().getEmail(),post.getUser().getSemester(), roles);
 
                 String fileUrl = null;
                 String fileType = null;
@@ -198,7 +198,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostResponse> getUserPost(String username) {
 
-        User user = userRepository.findByUserName(username).orElseThrow(() -> new AppException("User not found"));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new AppException("User not found"));
 
         List<Posts> posts = postRepository.findAllByUserOrderByDateDesc(user).orElse(Collections.emptyList());
         List<PostResponse> responses = new ArrayList<>();
@@ -209,7 +209,7 @@ public class PostServiceImpl implements PostService {
                 List<String> roles = post.getUser().getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
 
                 UserResponse userResponse = new UserResponse(post.getUser()
-                        .getId(), post.getUser().getFullName(),post.getUser().getEmail(),post.getUser().getUserName() ,post.getUser().getSemester(), roles);
+                        .getId(), post.getUser().getFullName(),post.getUser().getEmail(),post.getUser().getSemester(), roles);
 
                 String fileUrl = null;
                 String fileType = null;

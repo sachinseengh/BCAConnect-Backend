@@ -12,14 +12,13 @@ import java.util.List;
 
 @Getter
 @Setter
+
 @AllArgsConstructor
-@NoArgsConstructor
 public class UserResponse {
 
 private Long id;
 private String fullName;
 private String email;
-private String userName;
 private String semester;
 private List<String> roles;
 

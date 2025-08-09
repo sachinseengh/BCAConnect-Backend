@@ -49,7 +49,7 @@ public class ModeratorServiceImpl implements ModeratorService {
 
 
 
-        responses.add(new UserResponse(user.getId(),user.getFullName(),user.getEmail(),user.getUserName(),user.getSemester(),roles));
+        responses.add(new UserResponse(user.getId(),user.getFullName(),user.getEmail(),user.getSemester(),roles));
        }
         return responses;
 
@@ -64,7 +64,7 @@ public class ModeratorServiceImpl implements ModeratorService {
             throw new AppException("Admin or Moderator cannot be deleted");
         }
 
-        User user = userRepository.findByUserName(username).orElseThrow(()->new AppException("User not found"));
+        User user = userRepository.findByEmail(username).orElseThrow(()->new AppException("User not found"));
         userRepository.delete(user);
         return user.getId();
     }
@@ -116,7 +116,7 @@ public class ModeratorServiceImpl implements ModeratorService {
                 List<String> roles = post.getUser().getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
 
                 UserResponse userResponse = new UserResponse(post.getUser()
-                        .getId(), post.getUser().getFullName(), post.getUser().getEmail(), post.getUser().getUserName(), post.getUser().getSemester(), roles);
+                        .getId(), post.getUser().getFullName(), post.getUser().getEmail(), post.getUser().getSemester(), roles);
 
                 String fileUrl = null;
                 String fileType = null;

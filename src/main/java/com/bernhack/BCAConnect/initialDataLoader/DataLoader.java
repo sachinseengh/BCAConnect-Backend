@@ -45,11 +45,11 @@ public class DataLoader implements CommandLineRunner {
     }
     public void loadAdminUser() throws Throwable {
 
-        if(!userRepository.findByUserName("sachin").isPresent()){
+        if(!userRepository.findByEmail("sachinseengh@gmail.com").isPresent()){
             Role role = roleRepository.findByName(RoleEnum.ADMIN.name()).orElseThrow(()->new AppException("Role not Found"));
             User user = new User();
             user.setFullName("sachin singh");
-            user.setUserName("sachin");
+
             user.setEmail("sachinseengh@gmail.com");
             user.setSemester("Sixth");
             String password = passwordEncoder.encode("sachin");
