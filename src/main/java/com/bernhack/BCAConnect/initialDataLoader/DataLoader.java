@@ -49,7 +49,8 @@ public class DataLoader implements CommandLineRunner {
             Role role = roleRepository.findByName(RoleEnum.ADMIN.name()).orElseThrow(()->new AppException("Role not Found"));
             User user = new User();
             user.setFullName("sachin singh");
-
+            user.setEnabled(true);
+            user.setAuthProvider("ADMIN");
             user.setEmail("sachinseengh@gmail.com");
             user.setSemester("Sixth");
             String password = passwordEncoder.encode("sachin");

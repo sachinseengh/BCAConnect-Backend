@@ -13,7 +13,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,Long> {
 
 
-
     Optional<User> findByEmail(String email);
 
     @Query(value = "select * from users u join user_roles ur on u.id=ur.user_id join roles r on r.id=ur.role_id where r.name=:role",nativeQuery = true)
