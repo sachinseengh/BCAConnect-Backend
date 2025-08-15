@@ -50,7 +50,7 @@ public class DataLoader implements CommandLineRunner {
             User user = new User();
             user.setFullName("sachin singh");
             user.setEnabled(true);
-            user.setAuthProvider("ADMIN");
+            user.setAuthProvider("GOOGLE");
             user.setEmail("sachinseengh@gmail.com");
             user.setSemester("Sixth");
             String password = passwordEncoder.encode("sachin");

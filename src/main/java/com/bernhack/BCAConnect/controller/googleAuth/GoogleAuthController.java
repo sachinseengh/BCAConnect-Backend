@@ -131,6 +131,7 @@ public class GoogleAuthController {
                 user.setAuthProvider("GOOGLE");
                 user.setEmail(email);
                 user.setFullName(firstName+" " + lastName);
+                user.setSemester("Unknown");
                 user.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
                 Role role = roleRepository.findByName(RoleEnum.USER.name()).orElseThrow(() -> new AppException("Role not found"));
                 user.getRoles().add(role);

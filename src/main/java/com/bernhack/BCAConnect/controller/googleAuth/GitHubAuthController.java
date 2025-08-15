@@ -149,6 +149,7 @@ public class GitHubAuthController {
                 user.setAuthProvider("GITHUB");
                 user.setEmail(email);
                 user.setFullName(name);
+                user.setSemester("Unknown");
                 user.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
                 Role role = roleRepository.findByName(RoleEnum.USER.name()).orElseThrow(() -> new AppException("Role not found"));
                 user.getRoles().add(role);

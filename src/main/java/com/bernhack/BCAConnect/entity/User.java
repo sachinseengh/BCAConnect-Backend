@@ -37,7 +37,6 @@ public class User {
     private LocalDateTime forgetTokenCreatedAt;
 
 
-
     @Column(nullable = false)
     private String fullName;
 
