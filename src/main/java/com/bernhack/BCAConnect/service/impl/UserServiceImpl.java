@@ -12,6 +12,7 @@ import com.bernhack.BCAConnect.entity.User;
 import com.bernhack.BCAConnect.enums.RoleEnum;
 import com.bernhack.BCAConnect.repository.RoleRepository;
 import com.bernhack.BCAConnect.repository.UserRepository;
+import com.bernhack.BCAConnect.service.EmailService;
 import com.bernhack.BCAConnect.service.UserService;
 import com.bernhack.BCAConnect.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,8 @@ public class UserServiceImpl implements UserService {
 
      @Autowired
      private JwtUtil jwtUtil;
-
+    @Autowired
+    private EmailService emailService;
 
 
     @Override
@@ -65,6 +67,7 @@ public class UserServiceImpl implements UserService {
 
 
         User user = new User();
+        user.setAuthProvider("MANUAL");
         user.setFullName(registerRequest.getFullName());
         user.setEmail(registerRequest.getEmail());
         user.setSemester(registerRequest.getSemester());
@@ -75,15 +78,30 @@ public class UserServiceImpl implements UserService {
 
         user.getRoles().add(role);
 
+
+        //Email Verification
+        user.setEnabled(false);
+        user.setTokenCreatedAt(LocalDateTime.now());
         userRepository.save(user);
+
+        //Sending Email
+        String token = jwtUtil.generateVerificationToken(user);
+
+        String verificationUrl = "http://localhost:5173/verify-email?token=" + token;
+        String subject = "Verify your email";
+        String body = "Click the link to verify your email:\n" + verificationUrl;
+
+        emailService.sendVerificationEmail(user.getEmail(),subject,body);
+
         return StringConstant.REGISTERED_SUCCESSFULLY;
     }
 
     @Override
     public String login(LoginRequest loginRequest) {
 
-        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(()->new AppException("User not found"));
+        String email = loginRequest.getEmail().trim();
 
+        User user = userRepository.findByEmail(email).orElseThrow(()->new AppException("User not found"));
 
         if (!user.isEnabled()) {
             Duration diff = Duration.between(user.getTokenCreatedAt(), LocalDateTime.now());
@@ -91,7 +109,6 @@ public class UserServiceImpl implements UserService {
             if (diff.toMinutes() > 15) {
                 throw new AppException("TokenExpired"); // frontend will handle this specifically
             }
-
             throw new AppException("Email not verified");
         }
 
