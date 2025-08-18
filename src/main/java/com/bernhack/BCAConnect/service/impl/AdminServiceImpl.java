@@ -46,10 +46,6 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public String makeModerator(String username) {
 
-
-
-
-
         if(userRepository.findUserWithRoleAdminOrModerator(username)){
             throw new AppException("Already a Moderator");
         }else{

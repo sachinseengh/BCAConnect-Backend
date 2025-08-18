@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -70,7 +71,10 @@ public class PostServiceImpl implements PostService {
             Path uploadPath = Paths.get("uploads/");
             Files.createDirectories(uploadPath);
             Path filePath = uploadPath.resolve(fileName);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            try (InputStream inputStream = file.getInputStream()) {
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            }
 
             post.setFilename(fileName);
             post.setFileType(file.getContentType()); // Save file type
@@ -157,8 +161,6 @@ public class PostServiceImpl implements PostService {
 
         return StringConstant.POST_DELETED;
     }
-
-
 
     @Override
     public List<PostResponse> getAllPosts() {
