@@ -234,4 +234,70 @@ public class PostServiceImpl implements PostService {
     }
 
 
+    @Override
+    public List<PostResponse> getUserSavedPost(){
+
+     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+     User user = userRepository.findByEmail(authentication.getName()).orElseThrow(()->new AppException("User not found"));
+
+
+     List<Posts> savedPosts = postRepository.findAllSavedPost(user.getId()).orElse(Collections.emptyList());
+
+        List<PostResponse> responses = new ArrayList<>();
+
+        if (savedPosts != null) {
+            for (Posts post : savedPosts) {
+
+                List<String> roles = post.getUser().getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
+
+                UserResponse userResponse = new UserResponse(post.getUser()
+                        .getId(), post.getUser().getFullName(), post.getUser().getEmail(),post.getSemester(), roles);
+
+                String fileUrl = null;
+                String fileType = null;
+                String fileName =null;
+
+                if (post.getFilename() != null) {
+                    fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                            .path("/uploads/")
+                            .path(post.getFilename())
+                            .toUriString();
+                    fileType = post.getFileType();
+                }
+
+                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(),post.getSubject(),post.getSemester(), post.getDate(), userResponse, fileUrl, fileType,fileName));
+            }
+            return responses;
+        } else {
+            return responses;
+        }
+    }
+
+    @Override
+    public String savePost(Long post_id) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(()->new AppException("User not found"));
+
+        if(post_id != null){
+
+
+            if(!postRepository.checkPostAlreadySaved(user.getId(),post_id)) {
+                Posts post = postRepository.findById(post_id).orElseThrow(() -> new AppException("Post not found"));
+
+                user.getSavedPosts().add(post);
+                userRepository.save(user);
+                return "Post Saved";
+
+            }else{
+                return "Post Already Saved";
+            }
+        }else {
+            return "Failed to save Post";
+        }
+    }
+
+
 }

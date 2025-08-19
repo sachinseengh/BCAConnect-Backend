@@ -9,6 +9,7 @@ import com.bernhack.BCAConnect.dto.post.VerifyPostRequest;
 import com.bernhack.BCAConnect.service.PostService;
 import com.bernhack.BCAConnect.service.UserService;
 import com.fasterxml.jackson.databind.ser.Serializers;
+import net.bytebuddy.agent.builder.AgentBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,6 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/post/")
 public class PostController extends BaseController {
-
 
     @Autowired
     private PostService postService;
@@ -32,12 +32,10 @@ public class PostController extends BaseController {
         return successResponse(StringConstant.POST_CREATED,postService.createPost(file,creatPostRequest));
     }
 
-
     @PutMapping("/update")
     public ResponseEntity<GlobalAPIResponse> updatePost(@RequestBody UpdatePostRequest updatePostRequest){
         return successResponse(StringConstant.POST_UPDATED,postService.updatePost(updatePostRequest));
     }
-
 
     @GetMapping("/getAllPosts")
     public ResponseEntity<GlobalAPIResponse> getAllPosts(){
@@ -54,6 +52,18 @@ public class PostController extends BaseController {
         return successResponse(StringConstant.USER_POSTS,postService.getUserPost(username));
     }
 
+
+    @PostMapping("/savePost/{post_id}")
+    public ResponseEntity<GlobalAPIResponse> saveUserPost(@PathVariable Long post_id){
+        return successResponse(StringConstant.POST_SAVED,postService.savePost(post_id));
+    }
+
+
+
+    @GetMapping("/savedPosts")
+    public ResponseEntity<GlobalAPIResponse> getSavedPost(){
+        return successResponse(StringConstant.SAVED_POSTS,postService.getUserSavedPost());
+    }
 
 
 

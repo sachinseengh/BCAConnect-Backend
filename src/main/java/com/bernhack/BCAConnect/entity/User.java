@@ -70,4 +70,11 @@ public class User {
     private List<Notes> notes = new ArrayList<>();
 
 
+    @ManyToMany
+    @JoinTable(
+            name="saved_posts",
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    private List<Posts> savedPosts = new ArrayList<>();
 }

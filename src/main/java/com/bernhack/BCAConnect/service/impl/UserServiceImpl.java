@@ -56,16 +56,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public String register(RegisterRequest registerRequest) {
 
-
         Optional<User> existingUser = userRepository.findByEmail(registerRequest.getEmail());
-
         if (existingUser.isPresent()) {
             String message = "Username already exists with provider: " + existingUser.get().getAuthProvider();
             throw new AppException(message);  // This will be caught by your GlobalExceptionHandler
         }
-
-
-
         User user = new User();
         user.setAuthProvider("MANUAL");
         user.setFullName(registerRequest.getFullName());

@@ -20,9 +20,13 @@ public interface PostService {
 
     String deletePost(Long id);
 
-
-
     List<PostResponse> getAllPosts();
 
     List<PostResponse> getUserPost(@PathVariable String username);
+
+
+    List<PostResponse> getUserSavedPost();
+
+
+    String savePost(Long post_id);
 }

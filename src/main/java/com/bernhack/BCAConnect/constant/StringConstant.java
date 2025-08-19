@@ -30,4 +30,6 @@ public class StringConstant {
 
     public static final String APP_EXCEPTION="App Excepiton";
     public static final String USER_NOT_FOUND = "User not Found";
+    public static final String SAVED_POSTS = "Saved Posts";
+    public static final String POST_SAVED = "Post Saved";
 }

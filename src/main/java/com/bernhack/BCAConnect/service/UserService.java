@@ -15,10 +15,9 @@ public interface UserService {
 
  UserResponse getMe();
 
-
-
  Long deleteMe();
 
  String changePassword(ChangePasswordRequest changePasswordRequest);
+
 
 }

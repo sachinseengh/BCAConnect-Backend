@@ -27,4 +27,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Boolean findUserWithRoleAdminOrModerator(@Param("username") String username);
 
 
+
+
+
+
 }
