@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
         //Sending Email
         String token = jwtUtil.generateVerificationToken(user);
 
-        String verificationUrl = "http://localhost:8080/auth/verify-email?token=" + token;
+        String verificationUrl = "http://localhost:5173/verify-email?token=" + token;
         String subject = "Verify your email";
         String body = "Click the link to verify your email:\n" + verificationUrl;
 
