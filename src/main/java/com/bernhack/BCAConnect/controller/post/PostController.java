@@ -63,7 +63,7 @@ public class PostController extends BaseController {
         return successResponse(StringConstant.SAVED_POSTS,postService.getUserSavedPost());
     }
 
-    @PostMapping("/unsavePost")
+    @PostMapping("/unsavePost/{post_id}")
     public ResponseEntity<GlobalAPIResponse> unsaveUserPost(@PathVariable Long post_id){
         return successResponse(StringConstant.POST_UNSAVED,postService.deleteSavedPost(post_id));
     }
