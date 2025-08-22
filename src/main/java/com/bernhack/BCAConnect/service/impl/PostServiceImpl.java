@@ -299,5 +299,24 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    @Override
+    public String deleteSavedPost(Long post_id) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(()->new AppException("User not found"));
+
+
+        if(post_id != null){
+                Posts post = postRepository.findById(post_id).orElseThrow(() -> new AppException("Post not found"));
+
+                user.getSavedPosts().remove(post);
+                userRepository.save(user);
+                return "Post Unsaved";
+        }else {
+            return "Failed to unsave Post";
+        }
+    }
+
 
 }

@@ -29,4 +29,6 @@ public interface PostService {
 
 
     String savePost(Long post_id);
+
+    String deleteSavedPost(Long post_id);
 }
