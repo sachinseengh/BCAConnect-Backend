@@ -39,12 +39,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ErrorResponse> handleExpiredJwtException(ExpiredJwtException ex, WebRequest request) {
-        ex.printStackTrace();
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.UNAUTHORIZED.value(),
                 "JWT access token expired",
-
                 ex.getMessage()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
