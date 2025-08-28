@@ -22,9 +22,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query(value = "SELECT COUNT(*) > 0 FROM users u " +
             "JOIN  user_roles ur ON u.id = ur.user_id " +
             "JOIN roles r ON r.id = ur.role_id " +
-            "WHERE u.user_name = :username " +
+            "WHERE u.email = :email " +
             "AND (r.name = 'ADMIN' OR r.name='MODERATOR') ", nativeQuery = true)
-    Boolean findUserWithRoleAdminOrModerator(@Param("username") String username);
+    Boolean findUserWithRoleAdminOrModerator(@Param("email") String email);
 
 
 

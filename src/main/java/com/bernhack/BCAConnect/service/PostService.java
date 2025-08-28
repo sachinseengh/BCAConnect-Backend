@@ -22,7 +22,7 @@ public interface PostService {
 
     List<PostResponse> getAllPosts();
 
-    List<PostResponse> getUserPost(@PathVariable String username);
+    List<PostResponse> getUserPost();
 
 
     List<PostResponse> getUserSavedPost();

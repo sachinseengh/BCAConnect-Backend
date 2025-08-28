@@ -44,15 +44,16 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public String makeModerator(String username) {
+    public String makeModerator(String email) {
 
-        if(userRepository.findUserWithRoleAdminOrModerator(username)){
+        if(userRepository.findUserWithRoleAdminOrModerator(email)){
             throw new AppException("Already a Moderator");
         }else{
-            User user = userRepository.findByEmail(username).orElseThrow(()->new AppException("Username not found"));
+            User user = userRepository.findByEmail(email).orElseThrow(()->new AppException("user not found"));
 
             Role role = roleRepository.findByName(RoleEnum.MODERATOR.name()).orElseThrow(()-> new AppException("Role not Found"));
 
+            user.getRoles().remove(0);
             user.getRoles().add(role);
             userRepository.save(user);
         }
@@ -65,12 +66,11 @@ public class AdminServiceImpl implements AdminService {
 
         User user = userRepository.findByEmail(username).orElseThrow(()->new AppException("User not Found"));
 
-        Role role = roleRepository.findByName(RoleEnum.MODERATOR.name()).orElseThrow(()->new AppException("Role not found"));
+        Role role = roleRepository.findByName(RoleEnum.USER.name()).orElseThrow(()->new AppException("Role not found"));
 
-        user.getRoles().remove(role);
+        user.getRoles().remove(0);
+        user.getRoles().add(role);
         userRepository.save(user);
-        return "";
+        return StringConstant.MODERATOR_REMOVED;
     }
-
-
 }

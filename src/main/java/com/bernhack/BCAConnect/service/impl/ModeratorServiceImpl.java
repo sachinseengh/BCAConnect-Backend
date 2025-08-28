@@ -121,6 +121,7 @@ public class ModeratorServiceImpl implements ModeratorService {
                 String fileUrl = null;
                 String fileType = null;
                 String fileName = null;
+                String originalFileName = null;
                 if (post.getFilename() != null) {
                     fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
                             .path("/uploads/")
@@ -128,11 +129,12 @@ public class ModeratorServiceImpl implements ModeratorService {
                             .toUriString();
                     fileType = post.getFileType();
                     fileName = post.getFilename();
+                    originalFileName=fileName.substring(fileName.indexOf("_")+1);
 
 
                 }
 
-                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(), post.getSemester(), post.getDate(), userResponse, fileUrl, fileType, fileName));
+                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(), post.getSemester(), post.getDate(), userResponse, fileUrl, fileType, originalFileName));
             }
             return responses;
         }

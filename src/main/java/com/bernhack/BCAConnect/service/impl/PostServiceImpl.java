@@ -155,10 +155,13 @@ public class PostServiceImpl implements PostService {
 
         Posts post = postRepository.findById(id).orElseThrow(()->new AppException("Post Not Found"));
 
-
+        List<User> users = userRepository.findAll();
+        for (User user : users) {
+            if (user.getSavedPosts().removeIf(p -> p.getId().equals(id))) {
+                userRepository.save(user); // only save if list was modified
+            }
+        }
         postRepository.delete(post);
-
-
         return StringConstant.POST_DELETED;
     }
 
@@ -179,6 +182,7 @@ public class PostServiceImpl implements PostService {
                 String fileUrl = null;
                 String fileType = null;
                 String fileName=null;
+                String originalFileName=null;
                 if (post.getFilename() != null) {
                     fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
                             .path("/uploads/")
@@ -187,10 +191,10 @@ public class PostServiceImpl implements PostService {
                     fileType = post.getFileType();
                     fileName=post.getFilename();
 
-
+                 originalFileName=fileName.substring(fileName.indexOf("_")+1);
                 }
 
-                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getDate(), userResponse, fileUrl, fileType,fileName));
+                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getDate(), userResponse, fileUrl, fileType,originalFileName));
             }
             return responses;
         }
@@ -198,9 +202,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponse> getUserPost(String username) {
+    public List<PostResponse> getUserPost() {
 
-        User user = userRepository.findByEmail(username).orElseThrow(() -> new AppException("User not found"));
+
+        Authentication authentication  = SecurityContextHolder.getContext().getAuthentication();
+
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow(() -> new AppException("User not found"));
 
         List<Posts> posts = postRepository.findAllByUserOrderByDateDesc(user).orElse(Collections.emptyList());
         List<PostResponse> responses = new ArrayList<>();
@@ -216,6 +223,7 @@ public class PostServiceImpl implements PostService {
                 String fileUrl = null;
                 String fileType = null;
                 String fileName =null;
+                String originalFileName=null;
 
                 if (post.getFilename() != null) {
                     fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -223,9 +231,12 @@ public class PostServiceImpl implements PostService {
                             .path(post.getFilename())
                             .toUriString();
                     fileType = post.getFileType();
+                    fileName=post.getFilename();
+
+                    originalFileName=fileName.substring(fileName.indexOf("_")+1);
                 }
 
-                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getDate(), userResponse, fileUrl, fileType,fileName));
+                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(), post.getSubject(),post.getSemester(),post.getDate(), userResponse, fileUrl, fileType,originalFileName));
             }
             return responses;
         } else {
@@ -257,6 +268,7 @@ public class PostServiceImpl implements PostService {
                 String fileUrl = null;
                 String fileType = null;
                 String fileName =null;
+                String originalFileName = null;
 
                 if (post.getFilename() != null) {
                     fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -264,9 +276,11 @@ public class PostServiceImpl implements PostService {
                             .path(post.getFilename())
                             .toUriString();
                     fileType = post.getFileType();
+                    fileName=post.getFilename();
+                    originalFileName=fileName.substring(fileName.indexOf("_")+1);
                 }
 
-                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(),post.getSubject(),post.getSemester(), post.getDate(), userResponse, fileUrl, fileType,fileName));
+                responses.add(new PostResponse(post.getId(), post.getCaption(), post.getContent(),post.getSubject(),post.getSemester(), post.getDate(), userResponse, fileUrl, fileType,originalFileName));
             }
             return responses;
         } else {
@@ -320,6 +334,5 @@ public class PostServiceImpl implements PostService {
             return "Failed to unsave Post";
         }
     }
-
 
 }

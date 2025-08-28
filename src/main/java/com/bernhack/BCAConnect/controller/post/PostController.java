@@ -47,11 +47,10 @@ public class PostController extends BaseController {
         return successResponse(StringConstant.POST_DELETED,postService.deletePost(post_id));
     }
 
-    @PostMapping("/getUserPost/{username}")
-    public ResponseEntity<GlobalAPIResponse> getUserPost(@PathVariable String username){
-        return successResponse(StringConstant.USER_POSTS,postService.getUserPost(username));
+    @GetMapping("/getUserPost")
+    public ResponseEntity<GlobalAPIResponse> getUserPost(){
+        return successResponse(StringConstant.USER_POSTS,postService.getUserPost());
     }
-
 
     @PostMapping("/savePost/{post_id}")
     public ResponseEntity<GlobalAPIResponse> saveUserPost(@PathVariable Long post_id){
