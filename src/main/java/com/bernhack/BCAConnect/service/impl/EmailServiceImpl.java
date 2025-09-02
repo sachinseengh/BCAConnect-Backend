@@ -47,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
 
 
     @Override
-    public ResponseEntity<?> sendverification(Map<String, String> request) {
+    public ResponseEntity<?> resendverification(Map<String, String> request) {
 
         String email = request.get("email");
         Optional<User> userOpt = userRepository.findByEmail(email);

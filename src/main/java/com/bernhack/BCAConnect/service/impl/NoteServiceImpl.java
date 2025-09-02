@@ -58,11 +58,5 @@ public class NoteServiceImpl implements NoteService {
         return responses;
     }
 
-    @Override
-    public Long deleteById(Long note_id) {
 
-        Notes note = noteRepository.findById(note_id).orElseThrow(()->new AppException("Note not Found"));
-        noteRepository.delete(note);
-        return note.getId();
-    }
 }

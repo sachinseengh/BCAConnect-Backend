@@ -34,6 +34,11 @@ private ModeratorService moderatorService;
         return successResponse(StringConstant.USER_DELETED,moderatorService.deleteUser(username));
     }
 
+    @DeleteMapping("/deleteNote/{id}")
+    public ResponseEntity<GlobalAPIResponse> deleteNote(@PathVariable Long id){
+        return successResponse("Notes Deleted",moderatorService.deleteById(id));
+    }
+
 
     @PostMapping("/verifyPost")
     public ResponseEntity<GlobalAPIResponse> verifyPost(@RequestBody VerifyPostRequest verifyPostRequest){

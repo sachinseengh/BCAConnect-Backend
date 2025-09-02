@@ -41,7 +41,7 @@ public class AuthController extends BaseController {
 
     @PostMapping("/resend-verification")
     public ResponseEntity<?> resendVerification(@RequestBody Map<String,String> request) {
-        return emailService.sendverification(request);
+        return emailService.resendverification(request);
     }
 
     @PostMapping("/forget-password")

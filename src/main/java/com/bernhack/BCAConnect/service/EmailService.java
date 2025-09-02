@@ -13,7 +13,7 @@ public interface EmailService {
 
     public ResponseEntity<?> verifyEmail(@RequestParam("token") String token);
 
-    public ResponseEntity<?> sendverification(@RequestBody Map<String,String> request);
+    public ResponseEntity<?> resendverification(@RequestBody Map<String,String> request);
 
 
     public ResponseEntity<?> sendForgetPasswordEmail(@RequestBody String email);

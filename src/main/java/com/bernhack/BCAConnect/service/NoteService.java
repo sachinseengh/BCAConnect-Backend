@@ -10,6 +10,6 @@ public interface NoteService {
 
     public List<NotesResponse> getNotesBySemesterAndSubject( String semester,String subject);
 
-    public Long deleteById(Long note_id);
+
 
 }

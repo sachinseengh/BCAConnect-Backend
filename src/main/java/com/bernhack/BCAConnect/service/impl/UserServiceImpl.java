@@ -26,7 +26,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -102,8 +104,14 @@ public class UserServiceImpl implements UserService {
             Duration diff = Duration.between(user.getTokenCreatedAt(), LocalDateTime.now());
 
             if (diff.toMinutes() > 15) {
+
+                Map<String, String> requestMap = new HashMap<>();
+                requestMap.put("email", email);
+                emailService.resendverification(requestMap);
+
                 throw new AppException("TokenExpired"); // frontend will handle this specifically
             }
+
             throw new AppException("Email not verified");
         }
 
@@ -118,7 +126,6 @@ public class UserServiceImpl implements UserService {
         }catch (Exception e){
 
             throw new AppException(StringConstant.INVALID_CREDENTIALS);
-
         }
     }
 

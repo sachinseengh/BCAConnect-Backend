@@ -75,7 +75,6 @@ public class ModeratorServiceImpl implements ModeratorService {
 
         Posts post = postRepository.findById(verifyPostRequest.getId()).orElseThrow(()->new AppException("Post Not Found"));
 
-
         if(verifyPostRequest.getVerified()==1){
 
             User user = post.getUser();
@@ -90,9 +89,7 @@ public class ModeratorServiceImpl implements ModeratorService {
                 note.setDate(LocalDateTime.now());
                 note.setUser(user);
                 noteRepository.save(note);
-
             }
-
             postRepository.save(post);
 
             return StringConstant.POST_VERIFIED;
@@ -139,5 +136,14 @@ public class ModeratorServiceImpl implements ModeratorService {
             return responses;
         }
         return responses;
+    }
+
+
+    @Override
+    public Long deleteById(Long note_id) {
+
+        Notes note = noteRepository.findById(note_id).orElseThrow(()->new AppException("Note not Found"));
+        noteRepository.delete(note);
+        return note.getId();
     }
 }

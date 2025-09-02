@@ -19,5 +19,7 @@ public interface ModeratorService {
 
     List<PostResponse> getAllUnverifiedPosts();
 
+    public Long deleteById(Long note_id);
+
 
 }
